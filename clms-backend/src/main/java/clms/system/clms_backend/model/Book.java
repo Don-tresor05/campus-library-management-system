@@ -1,0 +1,70 @@
+package clms.system.clms_backend.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "books")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String isbn;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String author;
+
+    private String publisher;
+    private Integer publicationYear;
+    private String category;
+    private String description;
+
+    @Column(nullable = false)
+    private Integer totalCopies;
+
+    @Column(nullable = false)
+    private Integer availableCopies;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private BookStatus status = BookStatus.AVAILABLE;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    public enum BookStatus {
+        AVAILABLE, BORROWED, RESERVED, LOST, DAMAGED
+    }
+}
+
+
+
+
+
+
+
